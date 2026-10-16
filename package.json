@@ -1,0 +1,6 @@
+{
+  "name": "toolshop-checkout-assignment",
+  "private": true,
+  "scripts": { "test": "playwright test", "typecheck": "tsc --noEmit" },
+  "devDependencies": { "@playwright/test": "^1.48.2", "@types/node": "^24.8.1", "typescript": "^5.9.3" }
+}
