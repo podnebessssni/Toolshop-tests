@@ -5,7 +5,19 @@ export type ScenarioName =
   | "slowDecision";
 
 export interface ScenarioData {
-  consumer: { email: string; firstName: string; lastName: string };
+  consumer: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    address: {
+      country: string;
+      postalCode: string;
+      houseNumber: string;
+      street: string;
+      city: string;
+      state: string;
+    };
+  };
   product: { name: string };
   payment: { method: string; installments: string };
   expected: {
@@ -56,6 +68,14 @@ class ScenarioDataFactory {
         email: "toolshop.qa@example.test",
         firstName: "Taylor",
         lastName: "Example",
+        address: {
+          country: "United States of America (the)",
+          postalCode: "10001",
+          houseNumber: "56",
+          street: "1 Test Street",
+          city: "Testville",
+          state: "Test State",
+        },
       },
       product: { name: this.availableProductNames[productIndex] },
       payment: { method: "buy-now-pay-later", installments: "3" },

@@ -57,25 +57,49 @@ export class CheckoutFunctions {
     await test.step(`Prepare guest checkout with ${data.product.name} and select financing`, async () => {
       await this.interceptor.install(data);
       await this.page.goto("/");
+      await this.addProductToCart(data);
+      await this.continueAsGuest(data);
+      await this.fillAddressAndContinue(data);
+      await this.selectPayment(data);
+    });
+  }
+
+  private async addProductToCart(data: ScenarioData): Promise<void> {
+    await test.step(`Add ${data.product.name} to the cart`, async () => {
       await this.screen.productCard(data.product.name).click();
       await this.screen.addToCart.click();
       await this.screen.cartLink.click();
       await this.screen.checkout.click();
+    });
+  }
+
+  private async continueAsGuest(data: ScenarioData): Promise<void> {
+    await test.step("Continue checkout as a guest", async () => {
       await this.screen.guestTab.click();
       await this.screen.guestEmail.fill(data.consumer.email);
       await this.screen.guestFirstName.fill(data.consumer.firstName);
       await this.screen.guestLastName.fill(data.consumer.lastName);
       await this.screen.guestSubmit.click();
       await this.screen.proceedGuest.click();
+    });
+  }
+
+  private async fillAddressAndContinue(data: ScenarioData): Promise<void> {
+    await test.step("Fill the guest shipping address and continue", async () => {
       await this.screen.country.selectOption({
-        label: "United States of America (the)",
+        label: data.consumer.address.country,
       });
-      await this.screen.postalCode.fill("10001");
-      await this.screen.houseNumber.fill("56");
-      await this.screen.street.fill("1 Test Street");
-      await this.screen.city.fill("Testville");
-      await this.screen.state.fill("Test State");
+      await this.screen.postalCode.fill(data.consumer.address.postalCode);
+      await this.screen.houseNumber.fill(data.consumer.address.houseNumber);
+      await this.screen.street.fill(data.consumer.address.street);
+      await this.screen.city.fill(data.consumer.address.city);
+      await this.screen.state.fill(data.consumer.address.state);
       await this.screen.proceedAddress.click();
+    });
+  }
+
+  private async selectPayment(data: ScenarioData): Promise<void> {
+    await test.step("Select the financing payment option", async () => {
       await this.screen.paymentMethod.selectOption(data.payment.method);
       await this.screen.installments.selectOption(data.payment.installments);
     });
