@@ -9,7 +9,12 @@ export class CheckoutScreen extends BasePage {
   productCard(productName: string): Locator {
     return this.page
       .getByTestId(/^product-/)
-      .filter({ has: this.page.getByText(productName, { exact: true }) })
+      .filter({
+        has: this.page.getByRole("heading", {
+          name: productName,
+          exact: true,
+        }),
+      })
       .filter({ hasNot: this.page.getByTestId("out-of-stock") });
   }
   readonly addToCart = this.page.getByTestId("add-to-cart");

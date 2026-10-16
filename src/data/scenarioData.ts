@@ -24,7 +24,7 @@ export interface ScenarioData {
     status: number;
     body: { message?: string; error?: string };
     uiMessage: string;
-  }
+  };
   delayMs: number;
 }
 
@@ -34,13 +34,8 @@ export function scenarioData(scenario: ScenarioName): ScenarioData {
 
 class ScenarioDataFactory {
   private readonly availableProductNames = [
-    "Combination Pliers",
-    "Pliers",
     "Bolt Cutters",
-    "Slip Joint Pliers",
-    "Claw Hammer with Shock Reduction Grip",
     "Hammer",
-    "Claw Hammer",
   ] as const;
 
   create(scenario: ScenarioName): ScenarioData {
@@ -58,11 +53,13 @@ class ScenarioDataFactory {
       case "slowDecision":
         return this.slowDecisionTemplate();
     }
-  };
+  }
 
   private baseData(): Omit<ScenarioData, "expected" | "delayMs"> {
-    // Pin consumer/payment data, but randomize only the product name; the UI supplies its current dynamic product ID.
-    const productIndex = Math.floor(Math.random() * this.availableProductNames.length);
+    // Pin consumer/payment data and randomize between two distinct product names; the UI supplies the dynamic product ID.
+    const productIndex = Math.floor(
+      Math.random() * this.availableProductNames.length,
+    );
     return {
       consumer: {
         email: "toolshop.qa@example.test",
